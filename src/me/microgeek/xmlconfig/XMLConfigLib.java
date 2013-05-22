@@ -1,5 +1,10 @@
 package me.microgeek.xmlconfig;
 
+import java.util.Map.Entry;
+
+import me.microgeek.xmlconfig.config.XMLConfig;
+import me.microgeek.xmlconfig.config.XMLUtilities;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class XMLConfigLib extends JavaPlugin {
@@ -10,7 +15,7 @@ public class XMLConfigLib extends JavaPlugin {
    */
   @Override
   public void onDisable() {
-
+      XMLUtilities.saveAllConfigs();
   }
 
   /*
@@ -19,8 +24,9 @@ public class XMLConfigLib extends JavaPlugin {
    */
   @Override
   public void onEnable() {
-    /**
-     * for files in plugins/plugin that end in .xml XMLConfig.loadNewConfig
-     */
+      XMLConfig xc = XMLUtilities.loadConfig("test", this);
+      for(Entry<String, Object> e : xc.getKeysAndValues("location_1", true).entrySet()) {
+          System.out.println(e.getKey() + ": " + e.getValue());
+      }
   }
 }
