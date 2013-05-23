@@ -21,7 +21,6 @@ public enum XMLDataType implements DataParser {
 		@Override
 		public Boolean parse(String string) {
 			if(!parsable(string)) {
-				System.err.println("Data not parsable");
 				return null;
 			}
 			return Boolean.parseBoolean(string);
@@ -42,7 +41,6 @@ public enum XMLDataType implements DataParser {
 		@Override
 		public Byte parse(String string) {
 			if(!parsable(string)) {
-				System.err.println("Data not parsable");
 				return null;
 			}
 			return Byte.parseByte(string);
@@ -63,7 +61,6 @@ public enum XMLDataType implements DataParser {
 		@Override
 		public Double parse(String string) {
 			if(!parsable(string)) {
-				System.err.println("Data not parsable");
 				return null;
 			}
 			return Double.parseDouble(string);
@@ -84,7 +81,6 @@ public enum XMLDataType implements DataParser {
 		@Override
 		public Float parse(String string) {
 			if(!parsable(string)) {
-				System.err.println("Data not parsable");
 				return null;
 			}
 			return Float.parseFloat(string);
@@ -105,7 +101,6 @@ public enum XMLDataType implements DataParser {
 		@Override
 		public Integer parse(String string) {
 			if(!parsable(string)) {
-				System.err.println("Data not parsable");
 				return null;
 			}
 			return Integer.parseInt(string);
@@ -126,7 +121,6 @@ public enum XMLDataType implements DataParser {
 		@Override
 		public Long parse(String string) {
 			if(!parsable(string)) {
-				System.err.println("Data not parsable");
 				return null;
 			}
 			return Long.parseLong(string);
@@ -142,7 +136,6 @@ public enum XMLDataType implements DataParser {
 		@Override
 		public Object parse(String string) {
 			if(!parsable(string)) {
-				System.err.println("Data not parsable");
 				return null;
 			}
 			return string;
@@ -163,7 +156,6 @@ public enum XMLDataType implements DataParser {
 		@Override
 		public Short parse(String string) {
 			if(!parsable(string)) {
-				System.err.println("Data not parsable");
 				return null;
 			}
 			return Short.parseShort(string);
@@ -179,7 +171,6 @@ public enum XMLDataType implements DataParser {
 		@Override
 		public String parse(String string) {
 			if(!parsable(string)) {
-				System.err.println("Data not parsable");
 				return null;
 			}
 			return string;

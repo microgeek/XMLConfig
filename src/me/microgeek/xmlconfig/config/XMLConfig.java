@@ -99,27 +99,50 @@ public class XMLConfig {
         return value.getValue();
     }
 
-    public boolean getBoolean(String path) {
-        return (Boolean) XMLDataType.BOOLEAN.parse(get(path).toString());
+    public Boolean getBoolean(String path) {
+        Object value = get(path);
+        if(value == null) return null;
+        return (Boolean) XMLDataType.BOOLEAN.parse(value.toString());
     }
 
-    public double getDouble(String path) {
-        return (Double) XMLDataType.DOUBLE.parse(get(path).toString());
+    public Double getDouble(String path) {
+        Object value = get(path);
+        if(value == null) return null;
+        return (Double) XMLDataType.DOUBLE.parse(value.toString());
     }
 
-    public float getFloat(String path) {
-        return (Float) XMLDataType.FLOAT.parse(get(path).toString());
+    public Float getFloat(String path) {
+        Object value = get(path);
+        if(value == null) return null;
+        return (Float) XMLDataType.FLOAT.parse(value.toString());
     }
-
-    public int getInt(String path) {
-        return (Integer) XMLDataType.INTEGER.parse(get(path).toString());
+    
+    public Short getShort(String path) {
+        Object value = get(path);
+        if(value == null) return null;
+        return (Short) XMLDataType.SHORT.parse(value.toString());
+    }
+    
+    public Integer getInt(String path) {
+        Object value = get(path);
+        if(value == null) return null;
+        return (Integer) XMLDataType.INTEGER.parse(value.toString());
+    }
+    
+    public Long getLong(String path) {
+        Object value = get(path);
+        if(value == null) return null;
+        return (Long) XMLDataType.LONG.parse(value.toString());
     }
 
     public String getString(String path) {
-        return (String) XMLDataType.STRING.parse(get(path).toString());
+        Object value = get(path);
+        if(value == null) return null;
+        return (String) XMLDataType.STRING.parse(value.toString());
     }
     
     public List<String> getStringList(String path) {
+        if(path == null) return null;
         return Arrays.asList(getValues(path, false).toArray(new String[0]));
     }
 

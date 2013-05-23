@@ -20,9 +20,13 @@ public class ItemstackDatatype implements DataType {
         Map<String, Object> rawMap = config.getKeysAndValues(path, true);
         Map<String, Object> enchantmentMap = config.getKeysAndValues(path + ".enchantments", false);
         List<String> lore = config.getStringList(path + ".lore");
-        itemMap.put("type", config.getString(path + ".type"));
-        itemMap.put("enchantments", enchantmentMap);
 
+        new ItemStackValueVerifier("type", config.getString(path + ".type")).addToItemMap(itemMap);
+        new ItemStackValueVerifier("amount", config.getInt(path + ".amount")).addToItemMap(itemMap);
+        new ItemStackValueVerifier("damage", config.getShort(path + ".damage")).addToItemMap(itemMap);
+        new ItemStackValueVerifier("enchantments", enchantmentMap).addToItemMap(itemMap);
+        
+        System.out.println(itemMap);
         ItemStack item = ItemStack.deserialize(itemMap);
         ItemMeta meta = item.getItemMeta();
 
@@ -35,9 +39,27 @@ public class ItemstackDatatype implements DataType {
         if(lore != null) {
             meta.setLore(Arrays.asList(config.getValues(path + ".lore", false).toArray(new String[0])));
         }
-        
+
         item.setItemMeta(meta);
         return item;
+    }
+
+    private class ItemStackValueVerifier {
+
+        private Object object;
+        private String path;
+        
+        public ItemStackValueVerifier(String path, Object object) {
+            this.object = object;
+            this.path = path;
+        }
+        
+        public void addToItemMap(Map<String, Object> map) {
+            if(object != null) {
+                map.put(path, object);
+            }
+        }
+
     }
 
 }
