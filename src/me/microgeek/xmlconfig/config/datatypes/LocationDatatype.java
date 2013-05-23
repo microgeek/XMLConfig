@@ -5,7 +5,7 @@ import org.bukkit.World;
 
 import me.microgeek.xmlconfig.config.XMLConfig;
 
-public class LocationDatatype implements DataType {
+public class LocationDatatype implements Datatype {
 
     @Override
     public Object parsed(String path, XMLConfig config) {

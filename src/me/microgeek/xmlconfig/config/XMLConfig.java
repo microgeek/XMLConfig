@@ -16,8 +16,10 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import me.microgeek.xmlconfig.config.datatypes.CuboidDatatype;
 import me.microgeek.xmlconfig.config.datatypes.ItemstackDatatype;
 import me.microgeek.xmlconfig.config.datatypes.LocationDatatype;
+import me.microgeek.xmlconfig.cuboid.Cuboid;
 
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
@@ -148,6 +150,10 @@ public class XMLConfig {
 
     public Location getLocation(String path) {
         return (Location) new LocationDatatype().parsed(path, this);
+    }
+    
+    public Cuboid getCuboid(String path) {
+        return (Cuboid) new CuboidDatatype().parsed(path, this);
     }
 
     public ItemStack getItemStack(String path) {

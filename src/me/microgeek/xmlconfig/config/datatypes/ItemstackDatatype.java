@@ -12,7 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import me.microgeek.xmlconfig.config.XMLConfig;
 
-public class ItemstackDatatype implements DataType {
+public class ItemstackDatatype implements Datatype {
 
     @Override
     public Object parsed(String path, XMLConfig config) {
@@ -26,7 +26,6 @@ public class ItemstackDatatype implements DataType {
         new ItemStackValueVerifier("damage", config.getShort(path + ".damage")).addToItemMap(itemMap);
         new ItemStackValueVerifier("enchantments", enchantmentMap).addToItemMap(itemMap);
         
-        System.out.println(itemMap);
         ItemStack item = ItemStack.deserialize(itemMap);
         ItemMeta meta = item.getItemMeta();
 
