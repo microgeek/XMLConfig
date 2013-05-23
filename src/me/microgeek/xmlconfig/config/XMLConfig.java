@@ -2,6 +2,7 @@ package me.microgeek.xmlconfig.config;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -15,8 +16,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import me.microgeek.xmlconfig.config.datatypes.ItemstackDatatype;
+import me.microgeek.xmlconfig.config.datatypes.LocationDatatype;
+
 import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -114,6 +118,18 @@ public class XMLConfig {
     public String getString(String path) {
         return (String) XMLDataType.STRING.parse(get(path).toString());
     }
+    
+    public List<String> getStringList(String path) {
+        return Arrays.asList(getValues(path, false).toArray(new String[0]));
+    }
+
+    public Location getLocation(String path) {
+        return (Location) new LocationDatatype().parsed(path, this);
+    }
+
+    public ItemStack getItemStack(String path) {
+        return (ItemStack) new ItemstackDatatype().parsed(path, this);
+    }
 
     public Map<String, Object> getKeysAndValues(String path, boolean deep) {
         path = getAbsolutePath(path);
@@ -121,10 +137,13 @@ public class XMLConfig {
         Node parent = getNode(path);
         if(doesNodeHaveChildren(parent)) {
             for(Node n : getChildNodes(parent, deep)) {
+                if(doesNodeHaveChildren(n)) continue;
                 String childPath = getNodePath(n);
-                map.put(getRelativePath(childPath), get(childPath));
+                String relativeChildPath = getYongestChild(childPath);
+                map.put(relativeChildPath.substring(relativeChildPath.indexOf(".") + 1), get(childPath));
             }
         }
+        map.remove(path);
         return map;
     }
 
@@ -136,24 +155,18 @@ public class XMLConfig {
         return getKeysAndValues(path, deep).values();
     }
 
-    /**
-     * Was more of a test, needs to moved over to XMLDataType.LOCATION, read
-     * comment in {@link XMLDataType}
-     */
-    public Location getLocation(String path) {
-        World world = plugin.getServer().getWorld(getString(addPath(path, "world")));
-        double x = getDouble(addPath(path, "x"));
-        double y = getDouble(addPath(path, "y"));
-        double z = getDouble(addPath(path, "z"));
-        float yaw = getFloat(addPath(path, "yaw"));
-        float pitch = getFloat(addPath(path, "pitch"));
-        return new Location(world, x, y, z, yaw, pitch);
-    }
-
     public String addPath(String path, String subpath) {
         return path.concat("." + subpath);
     }
 
+    public String getYongestChild(String path) {
+        if(path.contains(".")) {
+            String[] split = path.split("\\.");
+            return split[split.length - 1];
+        }
+        return path;
+    }
+    
     public String getRelativePath(String path) {
         if(path.startsWith("#document.config")) {
             String temp = path.substring("#document.config".length());
@@ -171,6 +184,7 @@ public class XMLConfig {
     }
 
     public boolean doesNodeHaveChildren(Node node) {
+        if(node == null || node.getChildNodes() == null) return false;
         return node.getChildNodes().getLength() > 0;
     }
 

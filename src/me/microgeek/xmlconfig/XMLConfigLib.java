@@ -1,5 +1,6 @@
 package me.microgeek.xmlconfig;
 
+import me.microgeek.xmlconfig.config.XMLConfig;
 import me.microgeek.xmlconfig.config.XMLUtilities;
 
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,9 +22,7 @@ public class XMLConfigLib extends JavaPlugin {
    */
   @Override
   public void onEnable() {
-//      XMLConfig xc = XMLUtilities.loadConfig("test", this);
-//      for(Entry<String, Object> e : xc.getKeysAndValues("location_1", true).entrySet()) {
-//          System.out.println(e.getKey() + ": " + e.getValue());
-//      }
+      XMLConfig xc = XMLUtilities.loadConfig("test", this);
+      System.out.println(xc.getItemStack("asdf.itemstack_1"));
   }
 }
