@@ -17,6 +17,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import me.microgeek.xmlconfig.config.datatypes.CuboidDatatype;
+import me.microgeek.xmlconfig.config.datatypes.InventoryDatatype;
 import me.microgeek.xmlconfig.config.datatypes.ItemstackDatatype;
 import me.microgeek.xmlconfig.config.datatypes.LocationDatatype;
 import me.microgeek.xmlconfig.cuboid.Cuboid;
@@ -36,7 +37,7 @@ public class XMLConfig {
     private DocumentBuilderFactory documentBuilderFactory;
     private File path;
     private String name;
-    private JavaPlugin plugin;
+    private JavaPlugin plugin; 
     private boolean save;
     private Map<String, XMLValue> values = new HashMap<String, XMLValue>();
 
@@ -118,19 +119,19 @@ public class XMLConfig {
         if(value == null) return null;
         return (Float) XMLDataType.FLOAT.parse(value.toString());
     }
-    
+
     public Short getShort(String path) {
         Object value = get(path);
         if(value == null) return null;
         return (Short) XMLDataType.SHORT.parse(value.toString());
     }
-    
+
     public Integer getInt(String path) {
         Object value = get(path);
         if(value == null) return null;
         return (Integer) XMLDataType.INTEGER.parse(value.toString());
     }
-    
+
     public Long getLong(String path) {
         Object value = get(path);
         if(value == null) return null;
@@ -142,7 +143,7 @@ public class XMLConfig {
         if(value == null) return null;
         return (String) XMLDataType.STRING.parse(value.toString());
     }
-    
+
     public List<String> getStringList(String path) {
         if(path == null) return null;
         return Arrays.asList(getValues(path, false).toArray(new String[0]));
@@ -151,7 +152,7 @@ public class XMLConfig {
     public Location getLocation(String path) {
         return (Location) new LocationDatatype().parsed(path, this);
     }
-    
+
     public Cuboid getCuboid(String path) {
         return (Cuboid) new CuboidDatatype().parsed(path, this);
     }
@@ -160,16 +161,20 @@ public class XMLConfig {
         return (ItemStack) new ItemstackDatatype().parsed(path, this);
     }
 
+    public ItemStack[] getInventory(String path) {
+        return (ItemStack[]) new InventoryDatatype().parsed(path, this);
+    }
+
     public Map<String, Object> getKeysAndValues(String path, boolean deep) {
         path = getAbsolutePath(path);
         Map<String, Object> map = new HashMap<String, Object>();
         Node parent = getNode(path);
         if(doesNodeHaveChildren(parent)) {
             for(Node n : getChildNodes(parent, deep)) {
-                if(doesNodeHaveChildren(n)) continue;
+                if(n == parent || (doesNodeHaveChildren(n) && deep)) continue;
                 String childPath = getNodePath(n);
                 String relativeChildPath = getYongestChild(childPath);
-                map.put(relativeChildPath.substring(relativeChildPath.indexOf(".") + 1), get(childPath));
+                map.put(relativeChildPath, get(childPath));
             }
         }
         map.remove(path);
@@ -195,7 +200,7 @@ public class XMLConfig {
         }
         return path;
     }
-    
+
     public String getRelativePath(String path) {
         if(path.startsWith("#document.config")) {
             String temp = path.substring("#document.config".length());
@@ -229,7 +234,11 @@ public class XMLConfig {
         List<Node> nodes = new ArrayList<Node>();
         nodes.add(node);
         for(Node n : nodeListToList(node.getChildNodes())) {
-            nodes.addAll(getChildNodes(n, true));
+            if(deep) {
+                nodes.addAll(getChildNodes(n, deep));
+            }else {
+                nodes.add(n);
+            }
         }
         return nodes;
     }
